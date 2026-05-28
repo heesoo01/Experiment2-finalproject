@@ -1,0 +1,17 @@
+[1] Data loaded
+    d_hat shape: (18, 700)
+    p_bs shape : (2, 18)
+    p shape    : (2, 700)
+[2] Building robust WLS initial positions and ML features...
+
+[Baseline] Robust WLS only
+    MAE=14.8954, RMSE=17.5771, Within2m=7.00%
+
+[3] Training candidate ML residual models
+    Ridge            | MAE=7.7934 | RMSE=9.5425 | Within2m=8.00% | time=0.01s
+    RandomForest     | MAE=7.5196 | RMSE=9.9206 | Within2m=13.71% | time=1.16s
+    GradientBoosting | MAE=6.6253 | RMSE=8.5013 | Within2m=18.29% | time=2.97s
+
+[4] Best model: GradientBoosting. Re-training on all available data...
+[5] Saved model.pkl
+[Done] Total train.py time: 11.86s
