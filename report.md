@@ -55,7 +55,7 @@ Final Project에서 제공된 DH_FR1.mat 데이터셋은 중간발표 데이터�
 
 네 번째 단계는 거리 통계량 생성이다. d_clean, d_corr, correction에 대해 평균, 표준편차, 중앙값, 최솟값, 최댓값, 25 percentile, 75 percentile을 계산한다. 이 통계량은 현재 샘플의 거리값들이 전체적으로 큰지, 특정 앵커가 과도하게 튀는지, 거리 분포가 얼마나 퍼져 있는지를 나타낸다. RTT fingerprinting 문제에서는 개별 거리값뿐 아니라 전체 거리 분포의 형태도 위치 추정에 중요한 정보가 된다.
 
-다섯 번째 단계는 BS_positions 기반 weighted centroid 생성이다. i번째 앵커 좌표를 b_i, 거리값을 d_i라고 할 때, 가까운 앵커일수록 사용자 위치에 더 큰 영향을 줄 수 있다고 보고 a_i = 1 / (d_i^q + ε) 형태의 가중치를 사용한다. 이때 q는 1 또는 2로 설정하여 서로 다른 민감도의 centroid를 만든다. Weighted centroid는 c = Σ_i a_i b_i / Σ_i a_i 로 계산된다. 본 알고리즘은 원본 거리 d_clean 기반 centroid와 bias 보정 거리 d_corr 기반 centroid를 모두 feature로 사용한다. 또한 d_corr 기반 centroid에는 앵커별 reliability를 함께 곱하여 안정적인 앵커의 영향이 더 커지도록 한다.
+다섯 번째 단계는 BS_positions 기반 weighted centroid 생성이다. i번째 앵커 좌표를 b_i, 거리값을 d_i라고 할 때, 가까운 앵커일수록 사용자 위치에 더 큰 영향을 줄 수 있다고 보고 a_i = 1 / (d_i^q + ε) 형태의 가중치를 사용한다. 이때 q는 1 또는 2로 설정하여 서로 다른 민감도의 centroid를 만든다. Weighted centroid는 각 앵커 좌표에 가중치를 곱해 평균을 내는 방식이다. 즉, 모든 앵커에 대해 `가중치 × 앵커 좌표`를 더한 뒤, 전체 가중치 합으로 나누어 계산한다. 본 알고리즘은 원본 거리 d_clean 기반 centroid와 bias 보정 거리 d_corr 기반 centroid를 모두 feature로 사용한다. 또한 d_corr 기반 centroid에는 앵커별 reliability를 함께 곱하여 안정적인 앵커의 영향이 더 커지도록 한다.
 
 여섯 번째 단계는 geometry-consistent 후보 위치 p0 계산이다. Weighted centroid는 간단하고 빠르지만 RTT noise가 큰 경우 위치 후보가 크게 흔들릴 수 있다. 따라서 bias 보정 거리 d_corr와 reliability를 이용하여 soft-L1 loss 기반의 제한된 least-squares 정제를 수행한다. 후보 위치 x에 대해 예측 거리는 ||x - b_i||이고, 잔차는 r_i(x) = ||x - b_i|| - d_corr,i로 정의된다. reliability가 높은 앵커의 잔차를 더 중요하게 반영하고, 큰 잔차의 영향을 줄이기 위해 soft-L1 형태의 강건 손실을 사용한다. 이 과정을 통해 geometry-consistent 위치 후보 p0를 얻는다.
 
