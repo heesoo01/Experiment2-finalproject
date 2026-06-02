@@ -1,6 +1,6 @@
 # Geometry-aware GradientBoosting 기반 RTT Fingerprinting 위치 추정 알고리즘
 
-이름: 채희수
+이름: 12236649 채희수
 
 ## 1. 모티베이션 & 인트로
 
